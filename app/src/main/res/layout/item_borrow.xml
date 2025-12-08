@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/borrow_book_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Название книги"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/borrow_book_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Автор" />
+
+        <TextView
+            android:id="@+id/borrow_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Дата взятия: 2025-12-08" />
+
+        <TextView
+            android:id="@+id/borrow_due_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Вернуть до: 2025-12-08" />
+
+        <TextView
+            android:id="@+id/borrow_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Статус: выдана" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
