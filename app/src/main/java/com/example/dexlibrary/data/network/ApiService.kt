@@ -12,6 +12,7 @@ import com.example.dexlibrary.data.model.RefreshTokenRequest
 import com.example.dexlibrary.data.model.RefreshTokenResponse
 import com.example.dexlibrary.data.model.RegisterRequest
 import com.example.dexlibrary.data.model.Reservation
+import com.example.dexlibrary.data.model.ReservationRequestBody
 import com.example.dexlibrary.data.model.User
 import retrofit2.Response
 import retrofit2.http.Body
@@ -48,7 +49,7 @@ interface ApiService {
     @GET("/api/circulation/my-borrows/")
     suspend fun getMyBorrows(@Header("Authorization") token: String): Response<List<Borrow>>
 
-    @GET("/api/catalog/favourites/")
+    @GET("/api/catalog/favorites/")
     suspend fun getFavorites(@Header("Authorization") token: String): Response<List<Favorite>>
 
     @POST("/api/catalog/favorites/")
@@ -57,9 +58,15 @@ interface ApiService {
         @Body body: FavoriteRequestBody
     ): Response<Favorite>
 
-    @DELETE("/api/catalog/favorites/{book_id}")
+    @DELETE("/api/catalog/favorites/{book_id}/")
     suspend fun removeFromFavorites(
         @Header("Authorization") token: String,
         @Path("book_id") bookId: Int
     ): Response<Unit>
+
+    @POST("/api/circulation/reserve/")
+    suspend fun reserveBook(
+        @Header("Authorization") token: String,
+        @Body body: ReservationRequestBody
+    ): Response<Reservation>
 }

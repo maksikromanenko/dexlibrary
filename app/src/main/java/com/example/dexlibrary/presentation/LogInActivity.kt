@@ -13,8 +13,8 @@ import androidx.lifecycle.lifecycleScope
 import com.example.dexlibrary.R
 import com.example.dexlibrary.data.model.LoginRequest
 import com.example.dexlibrary.data.network.RetrofitClient
+import com.example.dexlibrary.data.storage.DataManager
 import com.example.dexlibrary.data.storage.TokenManager
-import com.example.dexlibrary.data.storage.UserManager
 import kotlinx.coroutines.launch
 import java.io.IOException
 
@@ -38,11 +38,6 @@ class LogInActivity : AppCompatActivity() {
         button.setOnClickListener {
             val login = userLogin.text.toString().trim()
             val password = userPassword.text.toString().trim()
-            if(login == "admin" && password == "admin") {
-                val intent = Intent(this@LogInActivity, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-            }
             if (login.isNotEmpty() && password.isNotEmpty()) {
                 Log.i(TAG, "Login button clicked for user: $login")
                 val loginRequest = LoginRequest(username = login, password = password)
@@ -54,20 +49,13 @@ class LogInActivity : AppCompatActivity() {
                             val authResponse = response.body()
                             if (authResponse != null) {
                                 tokenManager.saveTokens(authResponse.access, authResponse.refresh)
-                                val authHeader = "Bearer ${authResponse.access}"
+                                DataManager.fetchAllData(authResponse.access)
 
-                                val profileResponse = RetrofitClient.apiService.getProfile(authHeader)
-                                if (profileResponse.isSuccessful) {
-                                    val user = profileResponse.body()
-                                    UserManager.currentUser = user
-                                    val intent = Intent(this@LogInActivity, MainActivity::class.java)
-                                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                    startActivity(intent)
+                                val intent = Intent(this@LogInActivity, MainActivity::class.java)
+                                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                startActivity(intent)
 
-                                    Toast.makeText(this@LogInActivity, "Login Successful: ${authResponse.message}", Toast.LENGTH_LONG).show()
-                                } else {
-                                    Log.e(TAG, "Failed to fetch profile: ${profileResponse.errorBody()?.string()}")
-                                }
+                                Toast.makeText(this@LogInActivity, "Login Successful: ${authResponse.message}", Toast.LENGTH_LONG).show()
                             } else {
                                 Log.e(TAG, "Login failed: Response body is null")
                                 Toast.makeText(this@LogInActivity, "Login failed: Empty response", Toast.LENGTH_LONG).show()

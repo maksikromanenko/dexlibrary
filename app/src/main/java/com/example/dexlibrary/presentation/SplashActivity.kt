@@ -11,8 +11,8 @@ import com.example.dexlibrary.R
 import com.example.dexlibrary.data.model.CheckTokenRequest
 import com.example.dexlibrary.data.model.RefreshTokenRequest
 import com.example.dexlibrary.data.network.RetrofitClient
+import com.example.dexlibrary.data.storage.DataManager
 import com.example.dexlibrary.data.storage.TokenManager
-import com.example.dexlibrary.data.storage.UserManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
@@ -95,35 +95,18 @@ class SplashActivity : AppCompatActivity() {
                 }
 
                 Log.i(TAG, "Токен валиден. Загрузка начальных данных...")
-                if (fetchData(currentAccessToken)) {
+                try {
+                    DataManager.fetchAllData(currentAccessToken)
                     Log.i(TAG, "Данные успешно загружены. Переход на MainActivity.")
                     NavigationTarget.MAIN_ACTIVITY
-                } else {
-                    Log.e(TAG, "Не удалось загрузить начальные данные. Переход на Login.")
+                } catch (e: Exception) {
+                    Log.e(TAG, "Не удалось загрузить начальные данные. Переход на Login.", e)
                     NavigationTarget.LOGIN_ACTIVITY
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Произошла ошибка во время проверки токена или загрузки данных.", e)
                 NavigationTarget.LOGIN_ACTIVITY
             }
-        }
-    }
-
-    private suspend fun fetchData(accessToken: String): Boolean {
-        val authHeader = "Bearer $accessToken"
-        return try {
-            val profileResponse = RetrofitClient.apiService.getProfile(authHeader)
-            if (profileResponse.isSuccessful) {
-                UserManager.currentUser = profileResponse.body()
-                Log.i(TAG, "Профиль успешно загружен")
-                true
-            } else {
-                Log.e(TAG, "Не удалось загрузить профиль: ${profileResponse.code()}")
-                false
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "Сетевая ошибка при загрузке данных", e)
-            false
         }
     }
 

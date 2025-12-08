@@ -1,4 +1,4 @@
-package com.example.dexlibrary.presentation.fragments
+package com.example.dexlibrary.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater

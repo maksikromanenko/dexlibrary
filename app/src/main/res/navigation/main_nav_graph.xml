@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.example.dexlibrary.presentation.HomeFragment"
+        android:label="HomeFragment" />
+
+    <fragment
+        android:id="@+id/navigation_search"
+        android:name="com.example.dexlibrary.presentation.SearchFragment"
+        android:label="SearchFragment" />
+
+    <fragment
+        android:id="@+id/navigation_favorites"
+        android:name="com.example.dexlibrary.presentation.FavoritesFragment"
+        android:label="FavoritesFragment" />
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.example.dexlibrary.presentation.ProfileFragment"
+        android:label="ProfileFragment" />
+
+</navigation>

@@ -7,6 +7,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dexlibrary.R
 import com.example.dexlibrary.data.model.Reservation
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class ReservationAdapter(val reservations: MutableList<Reservation>) : RecyclerView.Adapter<ReservationAdapter.ReservationViewHolder>() {
 
@@ -37,8 +40,19 @@ class ReservationAdapter(val reservations: MutableList<Reservation>) : RecyclerV
         fun bind(reservation: Reservation) {
             titleTextView.text = reservation.book_title
             authorTextView.text = reservation.book_author
-            dateTextView.text = "Дата бронирования: ${reservation.reserve_date}"
+            dateTextView.text = "Дата бронирования: ${formatDateString(reservation.reserve_date)}"
             statusTextView.text = "Статус: ${reservation.status}"
+        }
+
+        private fun formatDateString(dateString: String): String {
+            return try {
+                val inputFormatter = DateTimeFormatter.ISO_LOCAL_DATE // "YYYY-MM-DD"
+                val outputFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy", Locale("ru"))
+                val date = LocalDate.parse(dateString, inputFormatter)
+                date.format(outputFormatter)
+            } catch (e: Exception) {
+                dateString // В случае ошибки возвращаем исходную строку
+            }
         }
     }
 }

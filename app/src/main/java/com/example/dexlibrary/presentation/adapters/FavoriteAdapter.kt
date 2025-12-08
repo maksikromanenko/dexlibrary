@@ -13,7 +13,8 @@ import com.example.dexlibrary.data.model.Favorite
 
 class FavoriteAdapter(
     val favorites: MutableList<Favorite>,
-    private val onFavoriteClick: (Favorite) -> Unit
+    private val onFavoriteClick: (Favorite) -> Unit,
+    private val onItemClick: (Favorite) -> Unit
 ) : RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteViewHolder {
@@ -23,7 +24,7 @@ class FavoriteAdapter(
 
     override fun onBindViewHolder(holder: FavoriteViewHolder, position: Int) {
         val favorite = favorites[position]
-        holder.bind(favorite, onFavoriteClick)
+        holder.bind(favorite, onFavoriteClick, onItemClick)
     }
 
     override fun getItemCount() = favorites.size
@@ -42,7 +43,8 @@ class FavoriteAdapter(
         private val favoriteButton: ImageButton = itemView.findViewById(R.id.favorite_button)
         private val coverImageView: ImageView = itemView.findViewById(R.id.book_cover)
 
-        fun bind(favorite: Favorite, onFavoriteClick: (Favorite) -> Unit) {
+        fun bind(favorite: Favorite, onFavoriteClick: (Favorite) -> Unit, onItemClick: (Favorite) -> Unit) {
+            itemView.setOnClickListener { onItemClick(favorite) }
             val book = favorite.book
             titleTextView.text = book.title
             authorTextView.text = book.author_name

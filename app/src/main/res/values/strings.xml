@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">dexlibrary</string>
     <string name="title_search">Поиск</string>
-    <string name="title_main_menu">Главное меню</string>
-    <string name="title_favorites">Избранные</string>
+    <string name="title_home">Главная</string>
+    <string name="title_favorites">Избранное</string>
     <string name="title_profile">Профиль</string>
 </resources>

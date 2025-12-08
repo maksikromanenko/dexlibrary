@@ -7,6 +7,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dexlibrary.R
 import com.example.dexlibrary.data.model.Borrow
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class BorrowAdapter(val borrows: MutableList<Borrow>) : RecyclerView.Adapter<BorrowAdapter.BorrowViewHolder>() {
 
@@ -38,9 +41,20 @@ class BorrowAdapter(val borrows: MutableList<Borrow>) : RecyclerView.Adapter<Bor
         fun bind(borrow: Borrow) {
             titleTextView.text = borrow.book_title
             authorTextView.text = borrow.book_author
-            borrowDateTextView.text = "Дата взятия: ${borrow.borrow_date}"
-            dueDateTextView.text = "Вернуть до: ${borrow.due_date}"
+            borrowDateTextView.text = "Дата взятия: ${formatDateString(borrow.borrow_date)}"
+            dueDateTextView.text = "Вернуть до: ${formatDateString(borrow.due_date)}"
             statusTextView.text = "Статус: ${borrow.status}"
+        }
+
+        private fun formatDateString(dateString: String): String {
+            return try {
+                val inputFormatter = DateTimeFormatter.ISO_LOCAL_DATE // "YYYY-MM-DD"
+                val outputFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy", Locale("ru"))
+                val date = LocalDate.parse(dateString, inputFormatter)
+                date.format(outputFormatter)
+            } catch (e: Exception) {
+                dateString // В случае ошибки возвращаем исходную строку
+            }
         }
     }
 }

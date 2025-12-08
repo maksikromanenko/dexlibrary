@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -13,8 +12,8 @@ import androidx.lifecycle.lifecycleScope
 import com.example.dexlibrary.R
 import com.example.dexlibrary.data.model.RegisterRequest
 import com.example.dexlibrary.data.network.RetrofitClient
+import com.example.dexlibrary.data.storage.DataManager
 import com.example.dexlibrary.data.storage.TokenManager
-import com.example.dexlibrary.data.storage.UserManager
 import kotlinx.coroutines.launch
 import java.io.IOException
 
@@ -57,7 +56,7 @@ class RegActivity : AppCompatActivity() {
                             val authResponse = response.body()
                             if (authResponse != null) {
                                 tokenManager.saveTokens(authResponse.access, authResponse.refresh)
-                                UserManager.currentUser = authResponse.user
+                                DataManager.fetchAllData(authResponse.access)
                                 Log.i(TAG, "Registration successful: ${authResponse.message}")
 
                                 Toast.makeText(this@RegActivity, "Registration Successful: ${authResponse.message}", Toast.LENGTH_LONG).show()

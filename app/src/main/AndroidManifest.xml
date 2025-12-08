@@ -16,15 +16,16 @@
         android:networkSecurityConfig="@xml/network_security_config">
         <activity
             android:name=".presentation.SplashActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.Dexlibrary.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.LogInActivity" />
-        <activity android:name=".presentation.RegActivity" />
+        <activity android:name=".presentation.LogInActivity" android:theme="@style/Theme.Dexlibrary.NoActionBar" />
+        <activity android:name=".presentation.RegActivity" android:theme="@style/Theme.Dexlibrary.NoActionBar" />
         <activity
             android:name=".presentation.MainActivity"
             android:windowSoftInputMode="adjustPan" />
