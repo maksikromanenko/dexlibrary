@@ -3,11 +3,13 @@ package com.example.dexlibrary.data.network
 import com.example.dexlibrary.data.model.AuthResponse
 import com.example.dexlibrary.data.model.Book
 import com.example.dexlibrary.data.model.Borrow
+import com.example.dexlibrary.data.model.ChangePasswordRequest
 import com.example.dexlibrary.data.model.CheckTokenRequest
 import com.example.dexlibrary.data.model.CheckTokenResponse
 import com.example.dexlibrary.data.model.Favorite
 import com.example.dexlibrary.data.model.FavoriteRequestBody
 import com.example.dexlibrary.data.model.LoginRequest
+import com.example.dexlibrary.data.model.ProfileUpdateRequest
 import com.example.dexlibrary.data.model.RefreshTokenRequest
 import com.example.dexlibrary.data.model.RefreshTokenResponse
 import com.example.dexlibrary.data.model.RegisterRequest
@@ -39,6 +41,18 @@ interface ApiService {
 
     @GET("/api/users/profile/")
     suspend fun getProfile(@Header("Authorization") token: String): Response<User>
+
+    @PATCH("/api/users/profile/")
+    suspend fun updateProfile(
+        @Header("Authorization") token: String,
+        @Body request: ProfileUpdateRequest
+    ): Response<User>
+
+    @PATCH("/api/users/change-password/")
+    suspend fun changePassword(
+        @Header("Authorization") token: String,
+        @Body request: ChangePasswordRequest
+    ): Response<Unit> // Assuming the server returns no body on success
 
     @GET("/api/catalog/books/")
     suspend fun getBooks(@Header("Authorization") token: String): Response<List<Book>>
