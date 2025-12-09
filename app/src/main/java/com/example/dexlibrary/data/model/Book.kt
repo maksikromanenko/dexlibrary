@@ -15,5 +15,5 @@ data class Book(
     var is_favorite: Boolean,
     @SerializedName("image")
     val logo_url: String?,
-    val description : String?
+    val description: String?
 ) : Parcelable

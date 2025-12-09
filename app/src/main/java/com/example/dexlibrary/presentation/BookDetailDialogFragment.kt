@@ -58,12 +58,16 @@ class BookDetailDialogFragment : DialogFragment() {
         val titleTextView: TextView = view.findViewById(R.id.book_title)
         val authorTextView: TextView = view.findViewById(R.id.book_author)
         val publisherTextView: TextView = view.findViewById(R.id.book_publisher)
+        val isbnTextView: TextView = view.findViewById(R.id.book_isbn)
+        val descriptionTextView: TextView = view.findViewById(R.id.book_description)
         val coverImageView: ImageView = view.findViewById(R.id.book_cover)
         val reserveButton: Button = view.findViewById(R.id.reserve_button)
 
         titleTextView.text = book.title
         authorTextView.text = book.author_name
         publisherTextView.text = book.publisher
+        isbnTextView.text = "ISBN: ${book.isbn}"
+        descriptionTextView.text = book.description
 
         Glide.with(this)
             .load(book.logo_url)
@@ -88,7 +92,6 @@ class BookDetailDialogFragment : DialogFragment() {
                 val response = RetrofitClient.apiService.reserveBook(authHeader, requestBody)
                 if (response.isSuccessful) {
                     Toast.makeText(context, "Книга успешно забронирована!", Toast.LENGTH_SHORT).show()
-                    // Обновляем все данные, чтобы увидеть бронирование в HomeFragment
                     DataManager.fetchAllData(token)
                     dismiss()
                 } else {
