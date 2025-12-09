@@ -9,9 +9,11 @@ data class Book(
     val id: Int,
     val title: String,
     val author_name: String,
+    val isbn: String,
     val publisher: String,
     val total_copies: Int,
     var is_favorite: Boolean,
     @SerializedName("image")
-    val logo_url: String?
+    val logo_url: String?,
+    val description : String?
 ) : Parcelable

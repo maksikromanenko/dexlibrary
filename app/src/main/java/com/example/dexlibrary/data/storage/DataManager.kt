@@ -45,12 +45,10 @@ object DataManager {
                 val borrowsResponse = borrowsDeferred.await()
                 val favoritesResponse = favoritesDeferred.await()
 
-                // Обрабатываем простые запросы
                 if (userResponse.isSuccessful) _user.value = userResponse.body()
                 if (reservationsResponse.isSuccessful) _reservations.value = reservationsResponse.body() ?: emptyList()
                 if (borrowsResponse.isSuccessful) _borrows.value = borrowsResponse.body() ?: emptyList()
 
-                // Синхронизируем книги и избранное
                 if (booksResponse.isSuccessful && favoritesResponse.isSuccessful) {
                     val allBooks = booksResponse.body() ?: emptyList()
                     val favoriteItems = favoritesResponse.body() ?: emptyList()

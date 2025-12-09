@@ -32,8 +32,6 @@ data class User(
     val lastName: String,
     @SerializedName("full_name")
     val fullName: String,
-    @SerializedName("current_address")
-    val addressid: String
 )
 
 data class Address(
