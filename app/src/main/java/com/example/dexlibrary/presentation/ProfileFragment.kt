@@ -1,6 +1,7 @@
 package com.example.dexlibrary.presentation
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -18,12 +20,21 @@ import com.example.dexlibrary.data.model.User
 import com.example.dexlibrary.data.network.RetrofitClient
 import com.example.dexlibrary.data.storage.DataManager
 import com.example.dexlibrary.data.storage.TokenManager
+import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.formatter.PercentFormatter
+import com.github.mikephil.charting.highlight.Highlight
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener
+import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
-class ProfileFragment : Fragment() {
+class ProfileFragment : Fragment(), OnChartValueSelectedListener {
 
     private lateinit var firstNameEditText: TextInputEditText
     private lateinit var lastNameEditText: TextInputEditText
@@ -31,10 +42,16 @@ class ProfileFragment : Fragment() {
     private lateinit var actionButton: Button
     private lateinit var changePasswordButton: ImageButton
     private lateinit var logoutButton: ImageButton
+    private lateinit var borrowsStat: TextView
+    private lateinit var reservationsStat: TextView
+    private lateinit var favoritesStat: TextView
+    private lateinit var authorPieChart: PieChart
 
     private lateinit var tokenManager: TokenManager
     private var isEditMode = false
     private val TAG = "ProfileFragment"
+
+    private var originalChartColors: List<Int>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,19 +70,110 @@ class ProfileFragment : Fragment() {
         actionButton = view.findViewById(R.id.profile_action_button)
         changePasswordButton = view.findViewById(R.id.change_password_button)
         logoutButton = view.findViewById(R.id.logout_button)
+        borrowsStat = view.findViewById(R.id.borrows_stat)
+        reservationsStat = view.findViewById(R.id.reservations_stat)
+        favoritesStat = view.findViewById(R.id.favorites_stat)
+        authorPieChart = view.findViewById(R.id.author_pie_chart)
 
         actionButton.setOnClickListener { toggleMode() }
         changePasswordButton.setOnClickListener { showChangePasswordDialog() }
         logoutButton.setOnClickListener { showLogoutConfirmationDialog() }
 
-        observeUserProfile()
+        observeData()
+        setupPieChart()
     }
 
-    private fun observeUserProfile() {
+    private fun observeData() {
         viewLifecycleOwner.lifecycleScope.launch {
             DataManager.user.collectLatest { user ->
                 user?.let { populateUserData(it) }
             }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            DataManager.borrows.collectLatest { borrows ->
+                borrowsStat.text = "На руках: ${borrows.size}"
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            DataManager.reservations.collectLatest { reservations ->
+                reservationsStat.text = "Брони: ${reservations.size}"
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            DataManager.favorites.collectLatest { favorites ->
+                favoritesStat.text = "В избранном: ${favorites.size}"
+                updatePieChart(favorites.mapNotNull { it.book.author_name })
+            }
+        }
+    }
+
+    private fun setupPieChart() {
+        authorPieChart.apply {
+            description.isEnabled = false
+            isDrawHoleEnabled = true
+            setHoleColor(Color.TRANSPARENT)
+            setHoleRadius(40f)
+            setTransparentCircleRadius(40f)
+            setUsePercentValues(true)
+            setDrawEntryLabels(false)
+
+            legend.apply {
+                isEnabled = true
+                verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+                horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
+                orientation = Legend.LegendOrientation.HORIZONTAL
+                setDrawInside(false)
+                isWordWrapEnabled = true
+            }
+
+            setOnChartValueSelectedListener(this@ProfileFragment)
+        }
+    }
+
+    private fun updatePieChart(authors: List<String>) {
+        if (authors.isEmpty()) {
+            authorPieChart.visibility = View.GONE
+            return
+        }
+        authorPieChart.visibility = View.VISIBLE
+
+        val authorCounts = authors.groupingBy { it }.eachCount()
+        val entries = authorCounts.map { PieEntry(it.value.toFloat(), it.key) }
+
+        val dataSet = PieDataSet(entries, "")
+        
+        val colors = mutableListOf<Int>()
+        colors.addAll(ColorTemplate.MATERIAL_COLORS.toList())
+        colors.addAll(ColorTemplate.VORDIPLOM_COLORS.toList())
+        colors.addAll(ColorTemplate.JOYFUL_COLORS.toList())
+        originalChartColors = colors
+        dataSet.colors = originalChartColors
+
+        val pieData = PieData(dataSet)
+        pieData.setValueFormatter(PercentFormatter(authorPieChart))
+        pieData.setValueTextSize(11f)
+        pieData.setValueTextColor(Color.WHITE)
+
+        authorPieChart.data = pieData
+        authorPieChart.invalidate()
+    }
+
+    override fun onValueSelected(e: com.github.mikephil.charting.data.Entry?, h: Highlight?) {
+        if (h == null || originalChartColors == null) return
+
+        val selectedIndex = h.x.toInt()
+        val newColors = originalChartColors!!.mapIndexed { index, color ->
+            if (index == selectedIndex) color else Color.LTGRAY
+        }
+
+        (authorPieChart.data.dataSet as PieDataSet).colors = newColors
+        authorPieChart.invalidate()
+    }
+
+    override fun onNothingSelected() {
+        if (originalChartColors != null) {
+            (authorPieChart.data.dataSet as PieDataSet).colors = originalChartColors
+            authorPieChart.invalidate()
         }
     }
 
@@ -107,12 +215,9 @@ class ProfileFragment : Fragment() {
 
     private fun logout() {
         lifecycleScope.launch {
-            // 1. Очищаем все сессионные данные
             DataManager.clearData()
-            // 2. Стираем токены
             tokenManager.clearTokens()
 
-            // 3. Перенаправляем на экран входа
             val intent = Intent(activity, LogInActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)

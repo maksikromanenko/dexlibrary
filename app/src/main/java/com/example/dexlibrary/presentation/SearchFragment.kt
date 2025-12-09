@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -28,6 +29,7 @@ class SearchFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var bookAdapter: BookAdapter
     private lateinit var tokenManager: TokenManager
+    private lateinit var isbnSearchButton: Button
     private var allBooks: List<Book> = listOf()
     private val TAG = "SearchFragment"
 
@@ -45,6 +47,7 @@ class SearchFragment : Fragment() {
         tokenManager = TokenManager(requireContext())
         searchView = view.findViewById(R.id.search_view)
         recyclerView = view.findViewById(R.id.recycler_view_books)
+        isbnSearchButton = view.findViewById(R.id.isbn_search_button)
 
         bookAdapter = BookAdapter(mutableListOf(),
             onFavoriteClick = { book -> handleFavoriteClick(book) },
@@ -54,8 +57,15 @@ class SearchFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = bookAdapter
 
+        isbnSearchButton.setOnClickListener { showIsbnSearchDialog() }
+
         setupSearch()
         observeBooks()
+    }
+
+    private fun showIsbnSearchDialog() {
+        val dialog = IsbnSearchDialogFragment()
+        dialog.show(parentFragmentManager, "IsbnSearchDialog")
     }
 
     private fun showBookDetails(book: Book) {
