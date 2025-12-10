@@ -21,10 +21,12 @@
 
         <Button
             android:id="@+id/isbn_search_button"
-            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/brand_pink_dialog_button"
+            android:textColor="@color/white"
             android:text="ISBN" />
+
 
     </LinearLayout>
 

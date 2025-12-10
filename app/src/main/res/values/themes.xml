@@ -1,13 +1,24 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.Dexlibrary" parent="Theme.Material3.DayNight">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/brand_pink</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/brand_pink</item>
+        <item name="colorOnSecondary">@color/white</item>
+        
+        <!-- ИСПРАВЛЕНО: Устанавливаем черный цвет для системных баров -->
+        <item name="android:statusBarColor">@color/brand_black</item>
+        <item name="android:navigationBarColor">@color/brand_black</item>
     </style>
 
     <style name="Theme.Dexlibrary" parent="Base.Theme.Dexlibrary" />
 
-    <style name="Theme.Dexlibrary.NoActionBar" parent="Theme.Material3.DayNight.NoActionBar" />
+    <style name="Theme.Dexlibrary.NoActionBar" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@color/brand_black</item>
+        <item name="android:navigationBarColor">@color/brand_black</item>
+    </style>
 
     <style name="TransparentDialog" parent="Theme.AppCompat.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>

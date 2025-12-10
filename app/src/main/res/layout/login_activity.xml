@@ -4,22 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_background"
     tools:context=".presentation.LogInActivity">
 
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
         android:text="D E X.\nLibrary"
-        android:textColor="#00C8B3"
-        android:textSize="48sp"
         android:textAlignment="center"
+        android:textColor="#FF8DAD"
+        android:textSize="48sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="64dp"/>
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/subtitleTextView"
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="Вход в аккаунт"
-        android:textColor="@color/black"
+        android:textColor="#FF8DAD"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:text="Войти"
             app:backgroundTint="@android:color/white"
-            android:textColor="#00C8B3"
+            android:textColor="#FF8DAD"
             android:layout_marginTop="24dp"/>
 
         <TextView

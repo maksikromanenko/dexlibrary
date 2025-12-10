@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="24dp"
-    android:background="@android:color/white">
+    android:background="@color/near_pink">
 
     <TextView
         android:layout_width="wrap_content"
@@ -12,7 +12,8 @@
         android:layout_gravity="center_horizontal"
         android:text="Поиск по ISBN"
         android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="@color/white"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -23,7 +24,9 @@
             android:id="@+id/isbn_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="xxx-x-xxxx-xxxx-x" />
+            android:hint="xxx-x-xxxx-xxxx-x"
+            android:textColor="@color/brand_black"
+            android:background="@color/white"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
@@ -31,6 +34,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Найти" />
+        android:text="Найти"
+        android:backgroundTint="@color/brand_pink_dialog_button"
+        android:textColor="@color/white"/>
 
 </LinearLayout>

@@ -3,4 +3,11 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="yellow">#FFEB3B</color>
+    <color name="brand_black">#FF000000</color>
+    <color name="brand_pink">#FF8DAD</color>
+    <color name="brand_pink_dialog_button">#F88DAD</color>
+    <color name="brand_pink_search_button">#F88DAD</color>
+    <color name="near_pink">#FDDDE6</color>
+
+
 </resources>

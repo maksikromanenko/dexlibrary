@@ -91,12 +91,12 @@ class ProfileFragment : Fragment(), OnChartValueSelectedListener {
         }
         viewLifecycleOwner.lifecycleScope.launch {
             DataManager.borrows.collectLatest { borrows ->
-                borrowsStat.text = "На руках: ${borrows.size}"
+                borrowsStat.text = "Взято: ${borrows.size}"
             }
         }
         viewLifecycleOwner.lifecycleScope.launch {
             DataManager.reservations.collectLatest { reservations ->
-                reservationsStat.text = "Брони: ${reservations.size}"
+                reservationsStat.text = "В Брони: ${reservations.size}"
             }
         }
         viewLifecycleOwner.lifecycleScope.launch {
